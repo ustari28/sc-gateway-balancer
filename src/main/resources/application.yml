@@ -1,0 +1,20 @@
+server:
+    port: 8090
+spring:
+    cloud:
+        gateway:
+            discovery:
+                locator:
+                    enabled: true
+            routes:
+                - id: mn-first-rest
+                  uri: lb://mn-first-rest-balancer/api
+                  predicates:
+                      - Path=/micro1/api/**
+eureka:
+    client:
+        register-with-eureka: true
+        fetch-registry: true
+        registry-fetch-interval-seconds: 5
+        serviceUrl:
+            defaultZone: http://${EUREKA_SERVER:localhost}:8761/eureka/

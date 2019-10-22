@@ -1,16 +1,24 @@
 server:
     port: 8090
+    ribbon:
+        eureka:
+            enabled: true
 spring:
     cloud:
         gateway:
             discovery:
                 locator:
                     enabled: true
+                    lowerCaseServiceId: true
             routes:
                 - id: mn-first-rest
                   uri: lb://mn-first-rest-balancer/api
                   predicates:
                       - Path=/micro1/api/**
+                - id: eureka-client
+                  uri: lb://eureka-client
+                  predicates:
+                  - Path=/eureka-client/**
 eureka:
     client:
         register-with-eureka: true
@@ -18,3 +26,5 @@ eureka:
         registry-fetch-interval-seconds: 5
         serviceUrl:
             defaultZone: http://${EUREKA_SERVER:localhost}:8761/eureka/
+    instance:
+        preferIpAddress: true
